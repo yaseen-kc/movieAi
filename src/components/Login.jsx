@@ -1,6 +1,9 @@
 import Header from "./Header";
 import { useRef, useState } from "react";
 import { checkValidData } from "../utils/Validate";
+/* prettier-ignore*/
+import {createUserWithEmailAndPassword,signInWithEmailAndPassword,} from "firebase/auth";
+import { auth } from "../utils/Firebase";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
@@ -17,9 +20,45 @@ const Login = () => {
       email.current?.value,
       password.current?.value
     );
-    // console.log(name, email, password);
     setErrorMessage(message);
     if (message) return;
+
+    if (!isSignInForm) {
+      createUserWithEmailAndPassword(
+        auth,
+        email.current?.value,
+        password.current?.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + "-" + errorMessage);
+        });
+    } else {
+      signInWithEmailAndPassword(
+        auth,
+        email.current?.value,
+        password.current?.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(
+            errorCode === "auth/invalid-credential" &&
+              errorMessage.includes("auth/invalid-credential")
+              ? "Invalid Credentials"
+              : errorCode + "-" + errorMessage
+          );
+        });
+    }
   };
 
   const toggleSignInForm = () => {
@@ -64,7 +103,7 @@ const Login = () => {
             placeholder="Password"
             className="p-4 my-4 w-full bg-gray-700"
           />
-          <p className="text-red-500">{errorMessage}</p>
+          <p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
           <button
             className="p-4 my-4 w-full font-bold bg-red-700 rounded-lg cursor-pointer"
             onClick={handleButtonClick}
