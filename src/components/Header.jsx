@@ -24,7 +24,7 @@ const Header = () => {
 
   // Set up Firebase authentication listener
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // If user is authenticated, add user info to Redux store
         const { uid, email, displayName } = user;
@@ -35,6 +35,8 @@ const Header = () => {
         dispatch(removeUser());
         navigate("/");
       }
+
+      return () => unsubscribe();
     });
   }, []);
 
