@@ -3,7 +3,7 @@ import UserReducer from "./userSlice";
 
 const appStore = configureStore({
   reducer: {
-    user: UserReducer,
+    user: UserReducer, // Set up user slice in the Redux store
   },
 });
 
