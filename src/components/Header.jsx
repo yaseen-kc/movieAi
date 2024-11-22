@@ -47,16 +47,16 @@ const Header = () => {
         {/* Display the app logo */}
         {user && ( // Show user section if a user is logged in
           <div className="flex mt-6 ml-6">
-            <img
+            {/* <img
               alt="userIcon"
               className="w-12 h-12 rounded-md"
               src={UserLogo} // Display user's avatar icon
-            />
+            /> */}
             <button
               onClick={handleSignOut}
               className="font-bold text-white ml-4"
             >
-              (Sign Out) {/* Button to sign out */}
+              Sign Out {/* Button to sign out */}
             </button>
           </div>
         )}
