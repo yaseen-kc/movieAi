@@ -12,7 +12,7 @@ const usePopularMovies = () => {
       API_OPTIONS
     );
     const json = await data.json();
-    const shuffledResults = json.results.sort(() => Math.random() - 0.5);
+    const shuffledResults = json.results.sort(() => Math.random() - 2);
     dispatch(AddPopularMovies(shuffledResults));
   };
 
