@@ -15,3 +15,5 @@ export const SUPPORTED_LANGUAGES = [
   { identifier: "zh", name: "Chinese" },
   { identifier: "ml", name: "Malayalam" },
 ];
+
+export const GEMINI_KEY = "AIzaSyA_zq7sLp6fY44vSBpQEHhXrUjT3pe5D2w";
