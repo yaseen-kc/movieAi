@@ -1,10 +1,12 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import lang from "./LanguageConstants";
 import { useRef } from "react";
 import genAI from "./gemini";
 import { API_OPTIONS } from "./Constants";
+import { addGptMovieResult } from "../utils/gptSlice";
 
 const GptSearchBar = () => {
+  const dispatch = useDispatch();
   const lanKey = useSelector((store) => store.config.lang);
 
   const searchText = useRef(null);
@@ -27,14 +29,17 @@ const GptSearchBar = () => {
     const prompt =
       "act as a movie reviewer and suggest some movies for the query: " +
       searchText.current.value +
-      ". only give me names of 5 movies, comma separated like the example result given ahead. Example: Lucifer, Naran, Dangal, Ajagajantharam, Thaneer Mathan Dinanagal";
+      ". only give me names of 5 movies, comma separated like the example result given ahead. Example: Lucifer,Naran,Dangal,Ajagajantharam,Thaneer Mathan Dinanagal";
 
     const result = await model.generateContent(prompt);
     const gptMovies = result.response.text().split(",");
-
+    console.log(gptMovies);
     const data = gptMovies.map((movie) => searchMovieTMDB(movie));
     const tmdbResults = await Promise.all(data);
     console.log(tmdbResults);
+    dispatch(
+      addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults })
+    );
   };
   return (
     <div className="pt-[10%] flex justify-center">
